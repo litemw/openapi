@@ -1,30 +1,21 @@
 import { oas31 } from 'openapi3-ts';
 import { MetaKeys, Middleware } from '@litemw/router';
 import { get, noop, set } from 'lodash-es';
-
-export enum ApiMetaKeys {
-  apiMetadata = 'api-metadata',
-  apiObject = 'api-object',
-  apiOperation = 'api-operation',
-}
+import { MetaPaths } from './core';
 
 const noopBase: Middleware = noop.bind({});
 
 export function useApiObject(obj: oas31.OpenAPIObject) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router) => {
-    set(router.metadata, [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject], obj);
+    set(router.metadata, MetaPaths.apiObject, obj);
   };
 }
 
 export function useApiInfo(info: oas31.InfoObject) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router) => {
-    set(
-      router.metadata,
-      [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'info'],
-      info,
-    );
+    set(router.metadata, [...MetaPaths.apiObject, 'info'], info);
   };
 }
 
@@ -32,17 +23,9 @@ export function useApiServers(servers: oas31.ServerObject[]) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router, handler) => {
     if (handler) {
-      set(
-        handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'servers'],
-        servers,
-      );
+      set(handler.metadata, [...MetaPaths.apiOperation, 'servers'], servers);
     } else {
-      set(
-        router.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'servers'],
-        servers,
-      );
+      set(router.metadata, [...MetaPaths.apiObject, 'servers'], servers);
     }
   };
 }
@@ -50,22 +33,14 @@ export function useApiServers(servers: oas31.ServerObject[]) {
 export function useApiPaths(paths: oas31.PathsObject) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router) => {
-    set(
-      router.metadata,
-      [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'paths'],
-      paths,
-    );
+    set(router.metadata, [...MetaPaths.apiObject, 'paths'], paths);
   };
 }
 
 export function useApiComponents(components: oas31.ComponentsObject) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router) => {
-    set(
-      router.metadata,
-      [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'components'],
-      components,
-    );
+    set(router.metadata, [...MetaPaths.apiObject, 'components'], components);
   };
 }
 
@@ -73,17 +48,9 @@ export function useApiSecurity(security: oas31.SecurityRequirementObject[]) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router, handler) => {
     if (handler) {
-      set(
-        handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'security'],
-        security,
-      );
+      set(handler.metadata, [...MetaPaths.apiOperation, 'security'], security);
     } else {
-      set(
-        router.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'security'],
-        security,
-      );
+      set(router.metadata, [...MetaPaths.apiObject, 'security'], security);
     }
   };
 }
@@ -91,11 +58,7 @@ export function useApiSecurity(security: oas31.SecurityRequirementObject[]) {
 export function useApiTags(tags: oas31.TagObject[]) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router) => {
-    set(
-      router.metadata,
-      [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'tags'],
-      tags,
-    );
+    set(router.metadata, [...MetaPaths.apiObject, 'tags'], tags);
   };
 }
 
@@ -106,7 +69,7 @@ export function useApiExternalDocs(
   mw[MetaKeys.metaCallback] = (router) => {
     set(
       router.metadata,
-      [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'externalDocs'],
+      [...MetaPaths.apiObject, 'externalDocs'],
       externalDocs,
     );
   };
@@ -115,40 +78,27 @@ export function useApiExternalDocs(
 export function useApiWebhooks(webhooks: oas31.PathsObject) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router) => {
-    set(
-      router.metadata,
-      [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'webhooks'],
-      webhooks,
-    );
+    set(router.metadata, [...MetaPaths.apiObject, 'webhooks'], webhooks);
   };
 }
 
 export function useApiPathItems(path: string, pathItem: oas31.PathItemObject) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (router) => {
-    set(
-      router.metadata,
-      [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiObject, 'paths', path],
-      pathItem,
-    );
+    set(router.metadata, [...MetaPaths.apiObject, 'paths', path], pathItem);
   };
 }
 
 export function useApiOperation(operation: oas31.OperationObject) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (_, handler) => {
-    if (handler)
-      set(
-        handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation],
-        operation,
-      );
+    if (handler) set(handler.metadata, MetaPaths.apiOperation, operation);
   };
 }
 
 export function useApiTag(tag: string) {
   const mw = noopBase.bind({});
-  const path = [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'tags'];
+  const path = [...MetaPaths.apiOperation, 'tags'];
   mw[MetaKeys.metaCallback] = (_, handler) => {
     if (handler)
       set(handler.metadata, path, [
@@ -162,11 +112,7 @@ export function useApiSummary(summary: string) {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (_, handler) => {
     if (handler)
-      set(
-        handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'summary'],
-        summary,
-      );
+      set(handler.metadata, [...MetaPaths.apiOperation, 'summary'], summary);
   };
 }
 
@@ -176,7 +122,7 @@ export function useApiDescription(description: string) {
     if (handler)
       set(
         handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'description'],
+        [...MetaPaths.apiOperation, 'description'],
         description,
       );
   };
@@ -188,7 +134,7 @@ export function useApiOperationId(operationId: string) {
     if (handler)
       set(
         handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'operationId'],
+        [...MetaPaths.apiOperation, 'operationId'],
         operationId,
       );
   };
@@ -198,11 +144,7 @@ export function useApiParameter(
   param: oas31.ParameterObject | oas31.ReferenceObject,
 ) {
   const mw = noopBase.bind({});
-  const path = [
-    ApiMetaKeys.apiMetadata,
-    ApiMetaKeys.apiOperation,
-    'parameters',
-  ];
+  const path = [...MetaPaths.apiOperation, 'parameters'];
 
   mw[MetaKeys.metaCallback] = (router, handler) => {
     set(router.metadata, path, [...(get(router.metadata, path) ?? []), param]);
@@ -222,7 +164,7 @@ export function useApiRequestBody(
     if (handler)
       set(
         handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'requestBody'],
+        [...MetaPaths.apiOperation, 'requestBody'],
         requestBody,
       );
   };
@@ -234,7 +176,7 @@ export function useApiResponses(responses: oas31.ResponsesObject) {
     if (handler)
       set(
         handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'responses'],
+        [...MetaPaths.apiOperation, 'responses'],
         responses,
       );
   };
@@ -246,7 +188,7 @@ export function useApiCallbacks(callbacks: oas31.CallbacksObject) {
     if (handler)
       set(
         handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'callbacks'],
+        [...MetaPaths.apiOperation, 'callbacks'],
         callbacks,
       );
   };
@@ -256,10 +198,6 @@ export function useApiDeprecated() {
   const mw = noopBase.bind({});
   mw[MetaKeys.metaCallback] = (_, handler) => {
     if (handler)
-      set(
-        handler.metadata,
-        [ApiMetaKeys.apiMetadata, ApiMetaKeys.apiOperation, 'deprecated'],
-        true,
-      );
+      set(handler.metadata, [...MetaPaths.apiOperation, 'deprecated'], true);
   };
 }
