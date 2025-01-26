@@ -10,6 +10,7 @@ export function useApiObject(obj: oas31.OpenAPIObject) {
   mw[MetaKeys.metaCallback] = (router) => {
     set(router.metadata, MetaPaths.apiObject, obj);
   };
+  return mw;
 }
 
 export function useApiInfo(info: oas31.InfoObject) {
@@ -17,6 +18,7 @@ export function useApiInfo(info: oas31.InfoObject) {
   mw[MetaKeys.metaCallback] = (router) => {
     set(router.metadata, [...MetaPaths.apiObject, 'info'], info);
   };
+  return mw;
 }
 
 export function useApiServers(servers: oas31.ServerObject[]) {
@@ -28,6 +30,7 @@ export function useApiServers(servers: oas31.ServerObject[]) {
       set(router.metadata, [...MetaPaths.apiObject, 'servers'], servers);
     }
   };
+  return mw;
 }
 
 export function useApiPaths(paths: oas31.PathsObject) {
@@ -35,6 +38,7 @@ export function useApiPaths(paths: oas31.PathsObject) {
   mw[MetaKeys.metaCallback] = (router) => {
     set(router.metadata, [...MetaPaths.apiObject, 'paths'], paths);
   };
+  return mw;
 }
 
 export function useApiComponents(components: oas31.ComponentsObject) {
@@ -42,6 +46,7 @@ export function useApiComponents(components: oas31.ComponentsObject) {
   mw[MetaKeys.metaCallback] = (router) => {
     set(router.metadata, [...MetaPaths.apiObject, 'components'], components);
   };
+  return mw;
 }
 
 export function useApiSecurity(security: oas31.SecurityRequirementObject[]) {
@@ -53,6 +58,7 @@ export function useApiSecurity(security: oas31.SecurityRequirementObject[]) {
       set(router.metadata, [...MetaPaths.apiObject, 'security'], security);
     }
   };
+  return mw;
 }
 
 export function useApiTags(tags: oas31.TagObject[]) {
@@ -60,6 +66,7 @@ export function useApiTags(tags: oas31.TagObject[]) {
   mw[MetaKeys.metaCallback] = (router) => {
     set(router.metadata, [...MetaPaths.apiObject, 'tags'], tags);
   };
+  return mw;
 }
 
 export function useApiExternalDocs(
@@ -73,6 +80,7 @@ export function useApiExternalDocs(
       externalDocs,
     );
   };
+  return mw;
 }
 
 export function useApiWebhooks(webhooks: oas31.PathsObject) {
@@ -80,6 +88,7 @@ export function useApiWebhooks(webhooks: oas31.PathsObject) {
   mw[MetaKeys.metaCallback] = (router) => {
     set(router.metadata, [...MetaPaths.apiObject, 'webhooks'], webhooks);
   };
+  return mw;
 }
 
 export function useApiPathItems(path: string, pathItem: oas31.PathItemObject) {
@@ -87,6 +96,7 @@ export function useApiPathItems(path: string, pathItem: oas31.PathItemObject) {
   mw[MetaKeys.metaCallback] = (router) => {
     set(router.metadata, [...MetaPaths.apiObject, 'paths', path], pathItem);
   };
+  return mw;
 }
 
 export function useApiOperation(operation: oas31.OperationObject) {
@@ -94,6 +104,7 @@ export function useApiOperation(operation: oas31.OperationObject) {
   mw[MetaKeys.metaCallback] = (_, handler) => {
     if (handler) set(handler.metadata, MetaPaths.apiOperation, operation);
   };
+  return mw;
 }
 
 export function useApiTag(tag: string) {
@@ -106,6 +117,7 @@ export function useApiTag(tag: string) {
         tag,
       ]);
   };
+  return mw;
 }
 
 export function useApiSummary(summary: string) {
@@ -114,6 +126,7 @@ export function useApiSummary(summary: string) {
     if (handler)
       set(handler.metadata, [...MetaPaths.apiOperation, 'summary'], summary);
   };
+  return mw;
 }
 
 export function useApiDescription(description: string) {
@@ -126,6 +139,7 @@ export function useApiDescription(description: string) {
         description,
       );
   };
+  return mw;
 }
 
 export function useApiOperationId(operationId: string) {
@@ -138,6 +152,7 @@ export function useApiOperationId(operationId: string) {
         operationId,
       );
   };
+  return mw;
 }
 
 export function useApiParameter(
@@ -154,6 +169,7 @@ export function useApiParameter(
         param,
       ]);
   };
+  return mw;
 }
 
 export function useApiRequestBody(
@@ -168,6 +184,7 @@ export function useApiRequestBody(
         requestBody,
       );
   };
+  return mw;
 }
 
 export function useApiResponses(responses: oas31.ResponsesObject) {
@@ -180,6 +197,7 @@ export function useApiResponses(responses: oas31.ResponsesObject) {
         responses,
       );
   };
+  return mw;
 }
 
 export function useApiCallbacks(callbacks: oas31.CallbacksObject) {
@@ -192,6 +210,7 @@ export function useApiCallbacks(callbacks: oas31.CallbacksObject) {
         callbacks,
       );
   };
+  return mw;
 }
 
 export function useApiDeprecated() {
@@ -200,4 +219,5 @@ export function useApiDeprecated() {
     if (handler)
       set(handler.metadata, [...MetaPaths.apiOperation, 'deprecated'], true);
   };
+  return mw;
 }
