@@ -5,7 +5,8 @@ import { getApiObject, getApiOperation, isOpenApiMethod } from './core';
 
 const defaultApiObject: oas31.OpenAPIObject = {
   openapi: '3.1.0',
-  info: { version: '1.0.0', title: 'My OpenAPI title' },
+  info: { version: '1.0.0', title: 'OpenAPI title' },
+  paths: {},
 };
 
 const defaultApiOperation: oas31.OperationObject = {
@@ -14,9 +15,10 @@ const defaultApiOperation: oas31.OperationObject = {
   },
 };
 
-export function exploreApi(router: Router): oas31.OpenAPIObject {
+function exploreApiRaw(router: Router): oas31.OpenAPIObject {
   const schema: oas31.OpenAPIObject = cloneDeep(defaultApiObject);
   const mainRouterSchema = getApiObject(router);
+
   merge(schema, mainRouterSchema);
 
   const routerPrefix = router.opts.prefix ?? '';
@@ -35,8 +37,7 @@ export function exploreApi(router: Router): oas31.OpenAPIObject {
     return opSchema;
   });
 
-  const pathsObject: oas31.PathsObject = {};
-  merge(pathsObject, ...pathSchemas);
+  merge(schema.paths, ...pathSchemas);
 
   for (const [prefix, innerRouter] of router.routers) {
     const innerSchema = exploreApi(innerRouter);
@@ -48,11 +49,29 @@ export function exploreApi(router: Router): oas31.OpenAPIObject {
     const pathsObjects = chain(innerSchema.paths ?? {})
       .entries()
       .map(([path, schema]) => ({
-        [routerPrefix + prefix + path]: schema,
+        [routerPrefix + (prefix ?? '') + path]: schema,
       }))
       .value();
+
     merge(schema.paths, ...pathsObjects);
   }
+
+  return schema;
+}
+
+const pathParamRegex = /:(\w+)/g;
+
+export function exploreApi(router: Router): oas31.OpenAPIObject {
+  const schema = exploreApiRaw(router);
+
+  schema.paths = chain(schema.paths ?? [])
+    .entries()
+    .map(([path, schema]) => [
+      path.replace(pathParamRegex, (_, param) => `{${param}}`),
+      schema,
+    ])
+    .fromPairs()
+    .value();
 
   return schema;
 }
