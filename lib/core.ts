@@ -14,11 +14,13 @@ export const MetaPaths = {
 };
 
 export function getApiObject(router: Router) {
-  return get(router, MetaPaths.apiObject) as oas31.OpenAPIObject | undefined;
+  return get(router.metadata, MetaPaths.apiObject) as
+    | oas31.OpenAPIObject
+    | undefined;
 }
 
 export function getApiOperation(handler: RouteHandler) {
-  return get(handler, MetaPaths.apiOperation) as
+  return get(handler.metadata, MetaPaths.apiOperation) as
     | oas31.OperationObject
     | undefined;
 }
