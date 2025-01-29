@@ -111,12 +111,14 @@ export function useApiTag(tag: string) {
   const mw = noopBase.bind({});
   const path = [...MetaPaths.apiOperation, 'tags'];
   mw[MetaKeys.metaCallback] = (router, handler) => {
-    set(router.metadata, path, [...(get(router.metadata, path) ?? []), tag]);
-    if (handler)
+    if (handler) {
       set(handler.metadata, path, [
         ...(get(handler.metadata, path) ?? []),
         tag,
       ]);
+    } else {
+      set(router.metadata, path, [...(get(router.metadata, path) ?? []), tag]);
+    }
   };
   return mw;
 }
@@ -163,12 +165,17 @@ export function useApiParameter(
   const path = [...MetaPaths.apiOperation, 'parameters'];
 
   mw[MetaKeys.metaCallback] = (router, handler) => {
-    set(router.metadata, path, [...(get(router.metadata, path) ?? []), param]);
-    if (handler)
+    if (handler) {
       set(handler.metadata, path, [
         ...(get(handler.metadata, path) ?? []),
         param,
       ]);
+    } else {
+      set(router.metadata, path, [
+        ...(get(router.metadata, path) ?? []),
+        param,
+      ]);
+    }
   };
   return mw;
 }
