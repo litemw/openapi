@@ -1,6 +1,6 @@
 {
   "name": "@litemw/openapi",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "VladDotH",
   "license": "MIT",
   "description": "Openapi meta middlewares for litemw router",
@@ -20,21 +20,11 @@
     "lint:fix": "bun run lint --fix"
   },
   "dependencies": {
-    "@koa/multer": "^3",
-    "@litemw/router": "^0.1.2",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
-    "joi": "^17.13.3",
-    "koa": "^2",
-    "koa-bodyparser": "^4",
-    "koa-router": "^12",
-    "koa2-swagger-ui": "^5.11.0",
-    "lodash-es": "^4.17.21",
-    "openapi3-ts": "^4.4.0",
-    "reflect-metadata": "^0.2.2",
-    "swagger-ui": "^5.18.2",
-    "swagger-ui-dist": "^5.18.2",
-    "zod": "^3.24.1"
+    "@koa/multer": "3.0.2",
+    "@litemw/router": "0.1.4",
+    "@litemw/middlewares": "0.1.3",
+    "lodash-es": "4.17.21",
+    "openapi3-ts": "4.4.0"
   },
   "devDependencies": {
     "@types/bun": "^1.1.17",
@@ -59,35 +49,28 @@
     "ts-node": "^10.9.1",
     "tsafe": "^1.8.5",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.1.3"
+    "typescript": "^5.1.3",
+    "koa": "2.15.3",
+    "koa-router": "13.0.1",
+    "koa2-swagger-ui": "5.11.0",
+    "koa-bodyparser": "4.4.1",
+    "@koa/multer": "3.0.2"
   },
   "peerDependencies": {
-    "koa": "^2",
-    "@koa/multer": "^3",
-    "koa-bodyparser": "^4",
-    "koa-router": "^12",
-    "@litemw/router": "^0.1.2",
+    "@litemw/router": "^0.1.4",
+    "@litemw/middlewares": "^0.1.3"
   },
   "peerDependenciesMeta": {
-    "koa": {
-      "optional": false
-    },
-    "@koa/multer": {
-      "optional": false
-    },
-    "koa-bodyparser": {
-      "optional": false
-    },
-    "koa-router": {
-      "optional": false
-    },
     "@litemw/router": {
+      "optional": false
+    },
+    "@litemw/middlewares": {
       "optional": false
     }
   },
   "files": [
-    "dist/*.js",
-    "dist/*.d.ts"
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
