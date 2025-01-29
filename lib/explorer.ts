@@ -24,7 +24,7 @@ function exploreApiRaw(router: Router): oas31.OpenAPIObject {
   merge(schema, mainRouterSchema);
 
   const routerOp = getApiOperation(router);
-  const routerTags = routerOp?.tags ?? schema.tags?.map((t) => t.name) ?? [];
+  const routerTags = routerOp?.tags ?? [];
   if (routerTags.length <= 0) {
     if (router.opts.routerPath) routerTags.push(router.opts.routerPath);
     else if (router.opts.prefix) routerTags.push(router.opts.prefix);
@@ -99,7 +99,9 @@ function exploreApiRaw(router: Router): oas31.OpenAPIObject {
     const handlerSchema = getApiOperation(h);
     merge(operation, handlerSchema);
 
-    operation.tags = [...(operation?.tags ?? []), ...routerTags];
+    if (!operation?.tags?.length) {
+      operation.tags = [...routerTags];
+    }
 
     if (isOpenApiMethod(h.method)) {
       set(opSchema, [routerPrefix + h.path, h.method], operation);
