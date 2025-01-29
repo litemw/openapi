@@ -73,7 +73,9 @@ function exploreApiRaw(router: Router): oas31.OpenAPIObject {
     operation.parameters = [...pathParams, ...queryParams];
 
     if (keys(handlerFilesMeta).length <= 0) {
-      operation.requestBody = { content: { 'text/json': handlerBodyMeta } };
+      operation.requestBody = {
+        content: { 'application/json': handlerBodyMeta },
+      };
     } else {
       operation.requestBody = {
         content: {
