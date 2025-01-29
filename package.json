@@ -1,6 +1,6 @@
 {
   "name": "@litemw/openapi",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "VladDotH",
   "license": "MIT",
   "description": "Openapi meta middlewares for litemw router",
@@ -20,11 +20,7 @@
     "lint:fix": "bun run lint --fix"
   },
   "dependencies": {
-    "@koa/multer": "3.0.2",
-    "@litemw/router": "0.1.4",
-    "@litemw/middlewares": "0.1.4",
-    "lodash-es": "4.17.21",
-    "openapi3-ts": "4.4.0"
+    "lodash-es": "4.17.21"
   },
   "devDependencies": {
     "@types/bun": "^1.1.17",
@@ -37,24 +33,19 @@
     "@types/node": "^20.3.1",
     "@types/supertest": "^6.0.2",
     "@types/swagger-ui": "^3.52.4",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "@typescript-eslint/parser": "^5.59.11",
-    "eslint": "^8.42.0",
-    "eslint-config-prettier": "^8.8.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
-    "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "tsafe": "^1.8.5",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3",
-    "koa": "2.15.3",
-    "koa-router": "13.0.1",
-    "koa2-swagger-ui": "5.11.0",
-    "koa-bodyparser": "4.4.1",
-    "@koa/multer": "3.0.2"
+    "openapi3-ts": "4.4.0"
   },
   "peerDependencies": {
     "@litemw/router": "^0.1.4",
