@@ -1,6 +1,6 @@
 {
   "name": "@litemw/openapi",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "VladDotH",
   "license": "MIT",
   "description": "Openapi meta middlewares for litemw router",
@@ -48,8 +48,9 @@
     "openapi3-ts": "4.4.0"
   },
   "peerDependencies": {
-    "@litemw/router": "^0.1.6",
-    "@litemw/middlewares": "^0.1.6"
+    "@litemw/router": "^0.1.7",
+    "@litemw/middlewares": "^0.1.6",
+    "openapi3-ts": "4.4.0"
   },
   "peerDependenciesMeta": {
     "@litemw/router": {
