@@ -110,7 +110,8 @@ export function useApiOperation(operation: oas31.OperationObject) {
 export function useApiTag(tag: string) {
   const mw = noopBase.bind({});
   const path = [...MetaPaths.apiOperation, 'tags'];
-  mw[MetaKeys.metaCallback] = (_, handler) => {
+  mw[MetaKeys.metaCallback] = (router, handler) => {
+    set(router.metadata, path, [...(get(router.metadata, path) ?? []), tag]);
     if (handler)
       set(handler.metadata, path, [
         ...(get(handler.metadata, path) ?? []),
