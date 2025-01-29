@@ -2,7 +2,7 @@ import { Router } from '@litemw/router';
 import { oas31 } from 'openapi3-ts';
 import { chain, cloneDeep, concat, entries, keys, merge, set } from 'lodash-es';
 import { getApiObject, getApiOperation, isOpenApiMethod } from './core';
-import { MiddlwareMetaKeys } from '../../litemw-middlewares/lib/metadata';
+import { MiddlwareMetaKeys } from '@litemw/middlewares';
 
 const defaultApiObject: oas31.OpenAPIObject = {
   openapi: '3.1.0',
