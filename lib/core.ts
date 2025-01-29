@@ -19,8 +19,8 @@ export function getApiObject(router: Router) {
     | undefined;
 }
 
-export function getApiOperation(handler: RouteHandler) {
-  return get(handler.metadata, MetaPaths.apiOperation) as
+export function getApiOperation(handlerOrRouter: RouteHandler | Router) {
+  return get(handlerOrRouter.metadata, MetaPaths.apiOperation) as
     | oas31.OperationObject
     | undefined;
 }
