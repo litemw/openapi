@@ -1,7 +1,8 @@
 import { Router } from '@litemw/router';
 import { oas31 } from 'openapi3-ts';
-import { chain, cloneDeep, concat, merge, set } from 'lodash-es';
+import { chain, cloneDeep, concat, entries, keys, merge, set } from 'lodash-es';
 import { getApiObject, getApiOperation, isOpenApiMethod } from './core';
+import { MiddlwareMetaKeys } from '../../litemw-middlewares/lib/metadata';
 
 const defaultApiObject: oas31.OpenAPIObject = {
   openapi: '3.1.0',
@@ -15,20 +16,88 @@ const defaultApiOperation: oas31.OperationObject = {
   },
 };
 
+// TODO smart merges
 function exploreApiRaw(router: Router): oas31.OpenAPIObject {
   const schema: oas31.OpenAPIObject = cloneDeep(defaultApiObject);
   const mainRouterSchema = getApiObject(router);
 
   merge(schema, mainRouterSchema);
 
+  const routerOp = getApiOperation(router);
+  const routerTags = routerOp?.tags ?? schema.tags?.map((t) => t.name) ?? [];
+  if (routerTags.length <= 0) {
+    if (router.opts.routerPath) routerTags.push(router.opts.routerPath);
+    else if (router.opts.prefix) routerTags.push(router.opts.prefix);
+  }
+
+  const routerBodyMeta = router.metadata[MiddlwareMetaKeys.requestBody],
+    routerPathMeta = router.metadata[MiddlwareMetaKeys.pathParams],
+    routerQueryMeta = router.metadata[MiddlwareMetaKeys.query],
+    routerFilesMeta = router.metadata[MiddlwareMetaKeys.files];
+
   const routerPrefix = router.opts.prefix ?? '';
 
   const pathSchemas = router.routeHandlers.map((h) => {
+    const handlerBodyMeta = h.metadata[MiddlwareMetaKeys.requestBody] ?? {},
+      handlerPathMeta = h.metadata[MiddlwareMetaKeys.pathParams] ?? {},
+      handlerQueryMeta = h.metadata[MiddlwareMetaKeys.query] ?? {},
+      handlerFilesMeta = h.metadata[MiddlwareMetaKeys.files] ?? {};
+
+    merge(handlerBodyMeta, routerBodyMeta);
+    merge(handlerPathMeta, routerPathMeta);
+    merge(handlerQueryMeta, routerQueryMeta);
+    merge(handlerFilesMeta, routerFilesMeta);
+
     const opSchema: oas31.PathsObject = {};
 
     const operation = cloneDeep(defaultApiOperation);
+
+    const pathParams = entries(handlerPathMeta).map(
+      ([name, data]: [string, object]) =>
+        ({
+          name,
+          ...data,
+          in: 'path',
+        } as const),
+    );
+
+    const queryParams = entries(handlerQueryMeta).map(
+      ([name, data]: [string, object]) =>
+        ({
+          name,
+          ...data,
+          in: 'query',
+        } as const),
+    );
+
+    operation.parameters = [...pathParams, ...queryParams];
+
+    if (keys(handlerFilesMeta).length <= 0) {
+      operation.requestBody = { content: { 'text/json': handlerBodyMeta } };
+    } else {
+      operation.requestBody = {
+        content: {
+          'multipart/form-data': {
+            schema: {
+              type: 'object',
+              properties: {
+                ...handlerBodyMeta.properties,
+                ...chain(handlerFilesMeta)
+                  .entries()
+                  .map(([k, v]) => [k, v.schema])
+                  .fromPairs()
+                  .value(),
+              },
+            },
+          },
+        },
+      };
+    }
+
     const handlerSchema = getApiOperation(h);
     merge(operation, handlerSchema);
+
+    operation.tags = [...(operation?.tags ?? []), ...routerTags];
 
     if (isOpenApiMethod(h.method)) {
       set(opSchema, [routerPrefix + h.path, h.method], operation);
