@@ -85,7 +85,7 @@ function exploreApiRaw(router: Router): oas31.OpenAPIObject {
             schema: {
               type: 'object',
               properties: {
-                ...handlerBodyMeta.schema.properties,
+                ...(handlerBodyMeta.schema?.properties ?? {}),
                 ...chain(handlerFilesMeta)
                   .entries()
                   .map(([k, v]) => [k, v.schema])

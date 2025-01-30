@@ -185,6 +185,29 @@ describe('OpenAPI explorer', async () => {
             tags: ['test/:version'],
           },
         },
+        'test/{version}/post-file-with-body': {
+          get: {
+            responses: { '200': {} },
+            parameters: [
+              { name: 'version', schema: { type: 'string' }, in: 'path' },
+            ],
+            requestBody: {
+              content: {
+                'multipart/form-data': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      someFile: { type: 'string', format: 'binary' },
+                      num: { type: 'number' },
+                      str: { type: 'string' },
+                    },
+                  },
+                },
+              },
+            },
+            tags: ['test/:version'],
+          },
+        },
       },
     } as const satisfies oas31.OpenAPIObject;
 
@@ -196,7 +219,13 @@ describe('OpenAPI explorer', async () => {
 
     router.get('/post-file').use(useFiles().single('someFile'));
 
+    router
+      .get('/post-file-with-body')
+      .use(useFiles().single('someFile'))
+      .use(useBody(validatePipe(bodySchema)));
+
     const spec = exploreApi(router);
+    console.log(spec);
     expect(spec).toEqual(schema);
   });
 });
