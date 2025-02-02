@@ -49,8 +49,8 @@
     "openapi3-ts": "4.4.0"
   },
   "peerDependencies": {
-    "@litemw/router": "^0.1.7",
-    "@litemw/middlewares": "^0.1.7",
+    "@litemw/router": "^0.1.8",
+    "@litemw/middlewares": "^0.1.8",
     "openapi3-ts": "4.4.0"
   },
   "peerDependenciesMeta": {
