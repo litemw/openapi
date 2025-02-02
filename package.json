@@ -1,9 +1,10 @@
 {
   "name": "@litemw/openapi",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "author": "VladDotH",
   "license": "MIT",
   "description": "Openapi meta middlewares for litemw router",
+  "type": "module",
   "private": false,
   "repository": {
     "type": "git",
