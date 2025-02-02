@@ -225,7 +225,6 @@ describe('OpenAPI explorer', async () => {
       .use(useBody(validatePipe(bodySchema)));
 
     const spec = exploreApi(router);
-    console.log(spec);
     expect(spec).toEqual(schema);
   });
 });
