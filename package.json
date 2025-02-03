@@ -1,6 +1,6 @@
 {
   "name": "@litemw/openapi",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "VladDotH",
   "license": "MIT",
   "description": "Openapi meta middlewares for litemw router",
@@ -63,6 +63,7 @@
   },
   "files": [
     "dist/**/*.js",
+    "dist/**/*.mjs",
     "dist/**/*.d.ts"
   ],
   "module": "dist/index.js",
