@@ -9,7 +9,7 @@ import entries from 'lodash/entries.js';
 import keys from 'lodash/keys.js';
 import merge from 'lodash/merge.js';
 import set from 'lodash/set.js';
-import { fromPairs } from 'lodash';
+import fromPairs from 'lodash';
 
 const defaultApiObject: oas31.OpenAPIObject = {
   openapi: '3.1.0',
@@ -151,7 +151,7 @@ export function exploreApi(router: Router): oas31.OpenAPIObject {
       path.replace(pathParamRegex, (_, param) => `{${param}}`),
       schema,
     ]),
-  );
+  ) as unknown as oas31.PathsObject;
 
   return schema;
 }
