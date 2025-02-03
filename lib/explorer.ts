@@ -9,7 +9,7 @@ import entries from 'lodash/entries.js';
 import keys from 'lodash/keys.js';
 import merge from 'lodash/merge.js';
 import set from 'lodash/set.js';
-import fromPairs from 'lodash';
+import fromPairs from 'lodash/fromPairs.js';
 
 const defaultApiObject: oas31.OpenAPIObject = {
   openapi: '3.1.0',
