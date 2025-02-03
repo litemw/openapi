@@ -1,6 +1,6 @@
 import { RouteHandler, Router } from '@litemw/router';
-import { get } from 'lodash-es';
 import { oas31 } from 'openapi3-ts';
+import get from 'lodash/get.js';
 
 export enum ApiMetaKeys {
   apiMetadata = 'api-metadata',

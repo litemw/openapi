@@ -1,8 +1,15 @@
 import { Router } from '@litemw/router';
 import { oas31 } from 'openapi3-ts';
-import { chain, cloneDeep, concat, entries, keys, merge, set } from 'lodash-es';
 import { getApiObject, getApiOperation, isOpenApiMethod } from './core';
 import { MiddlwareMetaKeys } from '@litemw/middlewares';
+
+import cloneDeep from 'lodash/cloneDeep.js';
+import concat from 'lodash/concat.js';
+import entries from 'lodash/entries.js';
+import keys from 'lodash/keys.js';
+import merge from 'lodash/merge.js';
+import set from 'lodash/set.js';
+import { fromPairs } from 'lodash';
 
 const defaultApiObject: oas31.OpenAPIObject = {
   openapi: '3.1.0',
@@ -86,11 +93,12 @@ function exploreApiRaw(router: Router): oas31.OpenAPIObject {
               type: 'object',
               properties: {
                 ...(handlerBodyMeta.schema?.properties ?? {}),
-                ...chain(handlerFilesMeta)
-                  .entries()
-                  .map(([k, v]) => [k, v.schema])
-                  .fromPairs()
-                  .value(),
+                ...fromPairs(
+                  entries(handlerFilesMeta).map(([k, v]: [string, any]) => [
+                    k,
+                    v.schema,
+                  ]),
+                ),
               },
             },
           },
@@ -121,12 +129,11 @@ function exploreApiRaw(router: Router): oas31.OpenAPIObject {
     schema.security = concat(schema.security ?? [], innerSchema.security ?? []);
     merge(schema.components, innerSchema.components);
 
-    const pathsObjects = chain(innerSchema.paths ?? {})
-      .entries()
-      .map(([path, schema]) => ({
+    const pathsObjects = entries(innerSchema.paths ?? {}).map(
+      ([path, schema]) => ({
         [routerPrefix + (prefix ?? '') + path]: schema,
-      }))
-      .value();
+      }),
+    );
 
     merge(schema.paths, ...pathsObjects);
   }
@@ -139,14 +146,12 @@ const pathParamRegex = /:(\w+)/g;
 export function exploreApi(router: Router): oas31.OpenAPIObject {
   const schema = exploreApiRaw(router);
 
-  schema.paths = chain(schema.paths ?? [])
-    .entries()
-    .map(([path, schema]) => [
+  schema.paths = fromPairs(
+    entries(schema.paths ?? []).map(([path, schema]) => [
       path.replace(pathParamRegex, (_, param) => `{${param}}`),
       schema,
-    ])
-    .fromPairs()
-    .value();
+    ]),
+  );
 
   return schema;
 }

@@ -1,7 +1,10 @@
 import { oas31 } from 'openapi3-ts';
 import { MetaKeys, Middleware } from '@litemw/router';
-import { get, noop, set } from 'lodash-es';
 import { MetaPaths } from './core';
+
+import get from 'lodash/noop.js';
+import noop from 'lodash/get.js';
+import set from 'lodash/set.js';
 
 const noopBase: Middleware = noop.bind({});
 

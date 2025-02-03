@@ -23,8 +23,8 @@ import {
 
 import * as tsafe from 'tsafe';
 import { MetaKeys, RouteHandler, Router } from '@litemw/router';
-import { MetaPaths } from '../../lib/core';
-import { get } from 'lodash-es';
+import { MetaPaths } from '../../lib';
+import { get } from 'lodash';
 
 describe('OpenAPI middlewares', async () => {
   const mockRouter = { metadata: {} },
